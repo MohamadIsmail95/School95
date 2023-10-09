@@ -4,6 +4,7 @@ using ERP.TEST.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -12,9 +13,11 @@ using Volo.Abp.EntityFrameworkCore;
 namespace ERP.TEST.Migrations
 {
     [DbContext(typeof(TESTDbContext))]
-    partial class TESTDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231009085345_AlterRelation")]
+    partial class AlterRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -88,22 +91,20 @@ namespace ERP.TEST.Migrations
 
             modelBuilder.Entity("ERP.TEST.Courses.StudentCourse", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("StudentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("CourseId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("StudentId")
+                    b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                    b.HasKey("StudentId", "CourseId");
 
                     b.HasIndex("CourseId");
 
-                    b.HasIndex("Id");
-
-                    b.HasIndex("StudentId");
+                    b.HasIndex("StudentId", "CourseId");
 
                     b.ToTable("AbpStudentCourses", (string)null);
                 });

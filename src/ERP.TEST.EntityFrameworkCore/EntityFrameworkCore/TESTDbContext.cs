@@ -2,6 +2,8 @@
 using ERP.TEST.Courses;
 using ERP.TEST.Students;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
+using System.Reflection.Metadata;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.Data;
@@ -93,8 +95,10 @@ public class TESTDbContext :
                 .HasMaxLength(StudentConsts.MaxNameLength)
                 .IsRequired();
 
+            b.HasIndex(x => x.Name).IsUnique();
 
             //many-to-many relationship with courses table => StudentCourse
+            b.HasMany(x=>x.RelationCourses).WithMany(x=>x.RelationStudents).UsingEntity<StudentCourse>();//for navigation
             b.HasMany(x => x.Courses).WithOne().HasForeignKey(x => x.StudentId).IsRequired();
         });
 
@@ -102,10 +106,11 @@ public class TESTDbContext :
         {
             b.ToTable(TESTConsts.DbTablePrefix + "Courses", TESTConsts.DbSchema);
             b.ConfigureByConvention();
-
             b.Property(x => x.Name)
                 .HasMaxLength(CourseConsts.MaxNameLength)
                 .IsRequired();
+            b.HasIndex(x => x.Name).IsUnique();
+
             b.HasMany(x => x.Students).WithOne().HasForeignKey(x => x.CourseId).IsRequired();
 
         });
@@ -116,12 +121,15 @@ public class TESTDbContext :
             b.ConfigureByConvention();
 
             //define composite key
-            b.HasKey(x => new { x.StudentId, x.CourseId });
+            //b.HasKey(x => new { x.StudentId, x.CourseId });
+            b.HasKey(x => x.Id);
 
             //many-to-many configuration
             b.HasOne<Student>().WithMany(x => x.Courses).HasForeignKey(x => x.StudentId).IsRequired();
             b.HasOne<Course>().WithMany(x=>x.Students).HasForeignKey(x => x.CourseId).IsRequired();
-            b.HasIndex(x => new { x.StudentId, x.CourseId });
+            //b.HasIndex(x => new { x.StudentId, x.CourseId });
+            b.HasIndex(x => x.Id);
+
         });
     }
 

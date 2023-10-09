@@ -10,13 +10,9 @@ namespace ERP.TEST.Students
 {
     public interface IStudentRepository :IRepository<Student,Guid>
     {
-        Task<List<StudentWithDetails>> GetListAsync(
-            string sorting,
-            int skipCount,
-            int maxResultCount,
-            CancellationToken cancellationToken = default
-        );
+        Task<Student> GetAsync(Guid id, CancellationToken cancellationToken = default);
+        Task<List<Student>> GetListAsync(string sorting, int skipCount, int maxResultCount);
+        Task<bool> FindByIdAsync(string name,Guid id);
 
-        Task<StudentWithDetails> GetAsync(Guid id, CancellationToken cancellationToken = default);
     }
 }

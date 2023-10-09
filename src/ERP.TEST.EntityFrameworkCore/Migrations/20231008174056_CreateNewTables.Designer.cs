@@ -13,8 +13,8 @@ using Volo.Abp.EntityFrameworkCore;
 namespace ERP.TEST.Migrations
 {
     [DbContext(typeof(TESTDbContext))]
-    [Migration("20231004111513_CreateStudentCourseTables")]
-    partial class CreateStudentCourseTables
+    [Migration("20231008174056_CreateNewTables")]
+    partial class CreateNewTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -82,6 +82,9 @@ namespace ERP.TEST.Migrations
                         .HasColumnType("nvarchar(64)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("AbpCourses", (string)null);
                 });
@@ -165,6 +168,9 @@ namespace ERP.TEST.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("AbpStudents", (string)null);
                 });

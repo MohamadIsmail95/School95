@@ -8,13 +8,11 @@ using Volo.Abp.Application.Services;
 
 namespace ERP.TEST.Students
 {
-    public interface IStudentService:IApplicationService
+    public interface IStudentService: ICrudAppService<StudentDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateStudentDto, CreateUpdateStudentDto>
     {
-        Task<PagedResultDto<StudentDto>> GetListAsync(StudentGetListInput input);
+        Task<PagedResultDto<StudentDto>> GetListAsync(PagedAndSortedResultRequestDto input);
         Task<StudentDto> GetAsync(Guid id);
-        Task<object> CreateAsync(CreateUpdateStudentDto input);
-        Task<string> DeleteAsync(Guid id);
-
-        
+        Task<StudentDto> CreateAsync(CreateUpdateStudentDto input);
+        Task DeleteAsync(Guid id);
     }
 }

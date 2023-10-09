@@ -1,10 +1,14 @@
 ﻿using ERP.TEST.Cources;
+using ERP.TEST.Courses;
 using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using Volo.Abp;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
 
@@ -13,58 +17,61 @@ namespace ERP.TEST.Students
     public class StudentManager: DomainService
     {
         private readonly IStudentRepository _studentRepository;
-        private readonly IRepository<Course, Guid> _courceRepository;
+        private readonly IRepository<Course,Guid> _courseRepository;
 
-        public StudentManager(IStudentRepository studentRepository, IRepository<Course, Guid> courceRepository)
+        public StudentManager(IStudentRepository studentRepository, IRepository<Course, Guid> courseRepository)
         {
             _studentRepository = studentRepository;
-            _courceRepository = courceRepository;
+            _courseRepository = courseRepository;
         }
 
-        public async Task<object> CreateAsync(string name,string address,int age,string phone, [CanBeNull] string[] courseNames)
+        public async Task<Student> CreateAsync(string name,string address,int age,string phone, [CanBeNull] Guid[] courseIds)
         {
+            Check.NotNullOrWhiteSpace(name, nameof(name));
+            var existingStudent = await _studentRepository.FindByIdAsync(name,Guid.Empty);
+            if (existingStudent)
+            {
+                throw new StudentAlreadyExistsException(name);
+            }
             var student = new Student(GuidGenerator.Create(),name,address,phone,age);
-            await SetCourseAsync(student, courseNames);
-            await _studentRepository.InsertAsync(student);
+            await SetCourseAsync(student, courseIds);
             return student;
 
         }
 
-        public async Task<object> UpdateAsync( Student student, string name, string address, int age, string phone, [CanBeNull] string[] courseNames)
+        public async Task<Student> EditAsync( Student student, string name, string address, int age, string phone, [CanBeNull] Guid[] courseIds)
         {
-            student.Address= address;
-            student.Age= age;
-            student.Phone= phone;
+            Check.NotNullOrWhiteSpace(name, nameof(name));
+            var existingStudent = await _studentRepository.FindByIdAsync(name,student.Id);
+            if (existingStudent)
+            {
+                throw new StudentAlreadyExistsException(name);
+            }
             student.SetName(name);
-            await SetCourseAsync(student, courseNames);
-
-           return  await _studentRepository.UpdateAsync(student);
+            student.Address = address;
+            student.Phone = phone;
+            student.Age=age;
+            await SetCourseAsync(student, courseIds);
+            return student;
         }
 
-        private async Task SetCourseAsync(Student student, [CanBeNull] string[] courseNames)
+        private async Task SetCourseAsync(Student student, [CanBeNull] Guid[] courIds)
         {
-            if (courseNames == null || !courseNames.Any())
-            {
-                student.RemoveAllCourse();
-                return;
-            }
-
-            var query = (await _courceRepository.GetQueryableAsync())
-                .Where(x => courseNames.Contains(x.Name))
-                .Select(x => x.Id)
-                .Distinct();
-
-            var courseIds = await AsyncExecuter.ToListAsync(query);
-            if (!courseIds.Any())
+            
+            if (!courIds.Any())
             {
                 return;
             }
 
-             student.RemoveAllCourseExceptGivenIds(courseIds);
-
-            foreach (var courseId in courseIds)
+            foreach (var courseId in courIds)
             {
+                var existingCourse = await _courseRepository.AnyAsync(x=> x.Id == courseId);
+                if (!existingCourse)
+                {
+                    throw new UserFriendlyException("This course GUID is invalid: "+ courseId);
+                }
                 student.AddCourse(courseId);
+            
             }
         }
     }

@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.Guids;
 
 namespace ERP.TEST.Students
 {
@@ -19,13 +20,14 @@ namespace ERP.TEST.Students
         public string Phone { get; set; }
         public int Age { get; set; }
 
-        public virtual ICollection<StudentCourse> Courses { get; private set; }
+        public virtual ICollection<StudentCourse> Courses { get;  set; }
+        public virtual List<Course> RelationCourses { get; set; } = new(); //for navigation
+
         public Student() { }
         //------------------------------------------------------------------------
         public Student(Guid id, string name, string address, string phone, int age)
            : base(id)
         {
-            this.Id = id;
             SetName(name);
             this.Address = address;
             Phone = phone;
@@ -33,12 +35,12 @@ namespace ERP.TEST.Students
             this.Courses = new Collection<StudentCourse>();
         }
 
-        public void SetName(string name)
+        internal void SetName(string name)
         {
             Name = Check.NotNullOrWhiteSpace(name, nameof(name), StudentConsts.MaxNameLength);
         }
 
-        public void AddCourse(Guid courseId)
+        internal void AddCourse(Guid courseId)
         {
             Check.NotNull(courseId, nameof(courseId));
 
@@ -47,10 +49,10 @@ namespace ERP.TEST.Students
                 return;
             }
 
-            Courses.Add(new StudentCourse(studentId:Id, courseId:courseId));
+            Courses.Add(new StudentCourse(Guid.NewGuid(),studentId:Id, courseId:courseId));
         }
 
-        public void RemoveCourse(Guid courseId)
+        internal void RemoveCourse(Guid courseId)
         {
             Check.NotNull(courseId, nameof(courseId));
 
@@ -59,22 +61,23 @@ namespace ERP.TEST.Students
                 return;
             }
 
-            Courses.RemoveAll(x => x.CourseId == courseId);
+             Courses.RemoveAll(x => x.CourseId == courseId);
+
         }
 
-        public void RemoveAllCourseExceptGivenIds(List<Guid> courseIds)
+        internal void RemoveAllCourseExceptGivenIds(List<Guid> courseIds)
         {
             Check.NotNullOrEmpty(courseIds, nameof(courseIds));
 
             Courses.RemoveAll(x => !courseIds.Contains(x.CourseId));
         }
 
-        public void RemoveAllCourse()
+        internal void RemoveAllCourse( Guid stdId)
         {
-            Courses.RemoveAll(x => x.StudentId == Id);
+            Courses.RemoveAll(x => x.StudentId == stdId);
         }
 
-        private bool IsInCourse(Guid courseId)
+        internal bool IsInCourse(Guid courseId)
         {
             return Courses.Any(x => x.CourseId == courseId);
         }

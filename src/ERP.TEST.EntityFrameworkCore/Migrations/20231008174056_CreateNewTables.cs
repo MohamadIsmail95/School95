@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ERP.TEST.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateStudentCourseTables : Migration
+    public partial class CreateNewTables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -82,6 +82,12 @@ namespace ERP.TEST.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_AbpCourses_Name",
+                table: "AbpCourses",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AbpStudentCourses_CourseId",
                 table: "AbpStudentCourses",
                 column: "CourseId");
@@ -90,6 +96,12 @@ namespace ERP.TEST.Migrations
                 name: "IX_AbpStudentCourses_StudentId_CourseId",
                 table: "AbpStudentCourses",
                 columns: new[] { "StudentId", "CourseId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpStudents_Name",
+                table: "AbpStudents",
+                column: "Name",
+                unique: true);
         }
 
         /// <inheritdoc />
