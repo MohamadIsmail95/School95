@@ -14,6 +14,8 @@
     "Permission:Courses": "Courses Management",
     "Permission:Courses.Create": "Creating new Courses",
     "Permission:Courses.Edit": "Editing the Courses",
-    "Permission:Courses.Delete": "Deleting the Courses"
+    "Permission:Courses.Delete": "Deleting the Courses",
+    "CourseNotFoundMessage": "This Cousre not found"
+
   }
 }

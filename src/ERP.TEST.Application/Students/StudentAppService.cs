@@ -15,6 +15,7 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.ObjectMapping;
+using Volo.Abp.Users;
 
 namespace ERP.TEST.Students
 {
@@ -25,16 +26,17 @@ namespace ERP.TEST.Students
         private readonly IStudentRepository _studentRepository;
         private readonly StudentManager _studentManager;
         private readonly IRepository<StudentCourse, Guid> _courceRepository;
+        private readonly ICurrentUser _currentUser;
 
 
         public StudentAppService(IRepository<Student, Guid> repository, IRepository<StudentCourse, Guid> courceRepository, IStudentRepository studentRepository,
-             StudentManager studentManager) : base(repository)
+             StudentManager studentManager, ICurrentUser currentUser) : base(repository)
         {
            
             _studentRepository = studentRepository;
             _studentManager = studentManager;
-            _courceRepository = courceRepository;     
-
+            _courceRepository = courceRepository;
+            _currentUser = currentUser;
         }
 
      
