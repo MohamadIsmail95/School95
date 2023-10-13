@@ -2,6 +2,7 @@
 using ERP.TEST.Cources;
 using ERP.TEST.Courses;
 using ERP.TEST.Students;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -17,10 +18,11 @@ public class TESTApplicationAutoMapperProfile : Profile
         CreateMap<Student, StudentDto>()
             .ForMember(dest => dest.CourseNames, opt => opt.MapFrom(src => src.RelationCourses
             .Select(x=> x.Name)
-        ))
-           .ReverseMap();
-        CreateMap<CreateUpdateStudentDto, Student>().ReverseMap();
+        )).ReverseMap();
 
+        CreateMap<CreateUpdateStudentDto, Student>()
+         .ForMember(dest => dest.Courses, opt => opt.MapFrom(src => src.CoursesId.
+         Select(x => new StudentCourse(Guid.NewGuid(),(Guid)src.Id, x)).ToList())).ReverseMap();
 
     }
 }

@@ -2,6 +2,7 @@
 using ERP.TEST.Courses;
 using ERP.TEST.Students;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using System.Reflection.Emit;
 using System.Reflection.Metadata;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity;
@@ -66,7 +68,7 @@ public class TESTDbContext :
     public TESTDbContext(DbContextOptions<TESTDbContext> options)
         : base(options)
     {
-
+        
     }
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -96,7 +98,6 @@ public class TESTDbContext :
                 .IsRequired();
 
             b.HasIndex(x => x.Name).IsUnique();
-
             //many-to-many relationship with courses table => StudentCourse
             b.HasMany(x=>x.RelationCourses).WithMany(x=>x.RelationStudents).UsingEntity<StudentCourse>();//for navigation
             b.HasMany(x => x.Courses).WithOne().HasForeignKey(x => x.StudentId).IsRequired();

@@ -15,7 +15,7 @@ namespace ERP.TEST.Students
 {
     public class Student:FullAuditedAggregateRoot<Guid>
     {
-        public string Name { get; private set; }
+        public string Name { get;  set; }
         public string Address { get; set; }
         public string Phone { get; set; }
         public int Age { get; set; }
