@@ -10,6 +10,5 @@ namespace ERP.TEST.Students
 {
     public interface IStudentRepository :IRepository<Student,Guid>
     {
-        Task<bool> FindByIdAsync(string name,Guid id);
     }
 }

@@ -9,7 +9,7 @@ using Volo.Abp.Application.Services;
 
 namespace ERP.TEST.Students
 {
-    public interface IStudentService: ICrudAppService<StudentDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateStudentDto, CreateUpdateStudentDto>
+    public interface IStudentAppService: ICrudAppService<StudentDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateStudentDto, CreateUpdateStudentDto>
     {
 
     }

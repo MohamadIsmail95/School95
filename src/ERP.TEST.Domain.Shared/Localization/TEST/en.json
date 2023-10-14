@@ -15,7 +15,7 @@
     "Permission:Courses.Create": "Creating new Courses",
     "Permission:Courses.Edit": "Editing the Courses",
     "Permission:Courses.Delete": "Deleting the Courses",
-    "CourseNotFoundMessage": "This Cousre not found"
-
+    "CourseNotFoundMessage": "This Cousre not found",
+    "StudentAreadyExsist": "This Name is already exsist"
   }
 }

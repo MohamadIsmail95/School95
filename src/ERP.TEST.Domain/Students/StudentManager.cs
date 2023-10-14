@@ -32,7 +32,8 @@ namespace ERP.TEST.Students
         public async Task<Student> CreateAsync(string name,string address,int age,string phone, [CanBeNull] Guid[] courseIds)
         {
             Check.NotNullOrWhiteSpace(name, nameof(name));
-            var existingStudent = await _studentRepository.FindByIdAsync(name,Guid.Empty);
+            //var existingStudent = await _studentRepository.FindByIdAsync(name,Guid.Empty);
+            var existingStudent = true;
             if (existingStudent)
             {
                 throw new StudentAlreadyExistsException(name);
@@ -47,7 +48,8 @@ namespace ERP.TEST.Students
         public async Task<Student> EditAsync( Student student, string name, string address, int age, string phone, [CanBeNull] Guid[] courseIds)
         {
             Check.NotNullOrWhiteSpace(name, nameof(name));
-            var existingStudent = await _studentRepository.FindByIdAsync(name,student.Id);
+            //var existingStudent = await _studentRepository.FindByIdAsync(name,student.Id);
+            var existingStudent = true;
             if (existingStudent)
             {
                 throw new StudentAlreadyExistsException(name);
@@ -59,7 +61,7 @@ namespace ERP.TEST.Students
             await SetCourseAsync(student, courseIds);
             return student;
         }
-
+      
         private async Task SetCourseAsync(Student student, [CanBeNull] Guid[] courIds)
         {
             
@@ -80,6 +82,9 @@ namespace ERP.TEST.Students
             
             }
         }
+
+
+
     }
 
 }

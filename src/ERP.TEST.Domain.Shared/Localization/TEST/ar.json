@@ -15,6 +15,8 @@
     "Permission:Courses.Create": "اضافة محاضرة جديدة",
     "Permission:Courses.Edit": "تعديل محاضرة",
     "Permission:Courses.Delete": "حذف محاضرة",
-    "CourseNotFoundMessage": "تقوم باضافة محاضرة غير موجودة"
+    "CourseNotFoundMessage": "تقوم باضافة محاضرة غير موجودة",
+    "StudentAreadyExsist": "هذا الاسم موجود مسبقا"
+
   }
 }

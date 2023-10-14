@@ -23,15 +23,6 @@ namespace ERP.TEST.Students
             
         }
 
-        public async Task<bool> FindByIdAsync(string name,Guid id)
-        {
-            var db = await GetDbSetAsync();
-            var isUniqueName = await db.AnyAsync(x => x.Name == name && x.Id != id);
-            return isUniqueName;
-
-
-        }
-
         public override async Task<IQueryable<Student>> WithDetailsAsync()
         {
             var db = await GetDbSetAsync();
